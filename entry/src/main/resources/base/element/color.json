@@ -1,0 +1,28 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#205374"
+    },
+    {
+      "name": "card_list_background",
+      "value": "#667db8"
+    },
+    {
+      "name": "list_item_count_background",
+      "value": "#290a59f7"
+    },
+    {
+      "name": "item_title_font",
+      "value": "#E6000000"
+    },
+    {
+      "name": "progress_background",
+      "value": "#205375"
+    },
+    {
+      "name": "main_background",
+      "value": "#112B3C"
+    }
+  ]
+}

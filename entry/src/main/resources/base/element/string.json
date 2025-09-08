@@ -1,0 +1,32 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "tracker your event progress"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "tracker your event progress"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "EventCountdownApp"
+    },
+    {
+      "name": "EntryFormAbility_desc",
+      "value": "add yearly, monthly progresses"
+    },
+    {
+      "name": "EntryFormAbility_label",
+      "value": "EventProgress"
+    },
+    {
+      "name": "widget_desc",
+      "value": "This is a service widget."
+    },
+    {
+      "name": "widget_display_name",
+      "value": "EventProgress"
+    }
+  ]
+}

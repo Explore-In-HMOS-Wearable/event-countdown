@@ -11,7 +11,7 @@ export default class CalendarManager {
 
   static getInstance(): CalendarManager {
     if (!CalendarManager.instance) {
-      const context = GlobalContext.getInstance().getContext();
+      const context = GlobalContext.getInstance().getAppContext();
       let manager = calendarManager.getCalendarManager(context);
       CalendarManager.instance = new CalendarManager(manager);
     }
@@ -25,7 +25,20 @@ export default class CalendarManager {
     } catch (err) {
       console.error(`Failed to get calendar. Code: ${err.code}, message: ${err.message}`);
     }
-    ;
+    return undefined;
+  }
+
+  async getEventById(id: number): Promise<calendarManager.Event | undefined> {
+    try {
+      const calendar = await this.getCalendar();
+      const events = await calendar?.getEvents();
+      const event = events?.find((event) => event.id === id);
+      if (event) {
+        return event;
+      }
+    } catch (err) {
+      console.error(`Failed to get calendar. Code: ${err.code}, message: ${err.message}`);
+    }
     return undefined;
   }
 }

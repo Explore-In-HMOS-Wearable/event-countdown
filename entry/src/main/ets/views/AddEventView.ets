@@ -8,18 +8,17 @@ import {
   ColorMetrics,
   LengthMetrics,
   LengthUnit,
-  Router
 } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { EIGHTY_PERCENT, FULL_HEIGHT_PERCENT, FULL_WIDTH_PERCENT, NINETY_PERCENT } from '../lib/constants';
 
 @Component
 export default struct AddEventView {
-  context: UIContext = this.getUIContext();
-  router: Router = this.context.getRouter();
-  @State title: string = "";
-  private calendarMgr: CalendarManager | undefined;
-  private calendar: calendarManager.Calendar | undefined;
+  pathStack: NavPathStack = AppStorage.get('PathStack') as NavPathStack
+  @State title: string = '';
+  private calendarMgr: CalendarManager | null = null;
+  private calendar: calendarManager.Calendar | null = null;
   private btnOptions: ArcButtonOptions = new ArcButtonOptions({});
   private selectedDate: Date = new Date()
   private scroller: Scroller = new Scroller()
@@ -43,22 +42,22 @@ export default struct AddEventView {
             this
               .calendar?.addEvent(eventInfo)
               .then(() => {
-                this.router.pushUrl({ url: "pages/Index" }).catch((error: BusinessError) => {
-                  hilog.error(0x0001, "eventCountdownApp", error.message);
-                })
+                this.pathStack.pop()
               })
               .catch((err: BusinessError) => {
-                console.log(err.message);
+                hilog.error(0x0001, 'eventCountdownApp', `Error: ${err.code} ${err.message}`);
               })
           }
         }
       });
     } catch (error) {
-      hilog.error(0x0001, "eventCountdownApp", error.message);
+      hilog.error(0x0001, 'eventCountdownApp', error.message);
     }
     this.calendarMgr = CalendarManager.getInstance();
     this.calendarMgr.getCalendar().then((calendar) => {
-      this.calendar = calendar;
+      if (calendar) {
+        this.calendar = calendar;
+      }
     });
 
   }
@@ -72,7 +71,7 @@ export default struct AddEventView {
             direction: FlexDirection.Column,
             alignItems: ItemAlign.Center
           }) {
-            TextInput({ placeholder: "Enter event", text: this.title!! })
+            TextInput({ placeholder: 'Enter event', text: this.title!! })
               .type(InputType.Normal)
               .margin({
                 left: 20,
@@ -88,15 +87,15 @@ export default struct AddEventView {
             })
               .lunar(false)
               .borderRadius(10)
-              .width('80%')
+              .width(EIGHTY_PERCENT)
               .margin({ bottom: 20 })
               .padding({ left: 10, right: 10 })
               .selectedTextStyle({
-                color: '#FFFFFF',
+                color: Color.White,
                 font: {
                   size: '18fp',
                   weight: FontWeight.Bold,
-                  family: "HarmonyOS Sans",
+                  family: 'HarmonyOS Sans',
                   style: FontStyle.Normal
                 }
               })
@@ -108,18 +107,18 @@ export default struct AddEventView {
           }
 
         }
-        .width('90%')
+        .width(NINETY_PERCENT)
         .scrollBar(BarState.Off)
         .scrollable(ScrollDirection.Vertical)
         .edgeEffect(EdgeEffect.Spring)
 
         ArcScrollBar({ scroller: this.scroller, state: BarState.Auto })
       }
-      .width('100%')
-      .height('100%')
+      .width(FULL_WIDTH_PERCENT)
+      .height(FULL_HEIGHT_PERCENT)
     }
     .justifyContent(FlexAlign.Center)
-    .width('100%')
-    .height('100%')
+    .width(FULL_WIDTH_PERCENT)
+    .height(FULL_HEIGHT_PERCENT)
   }
 }

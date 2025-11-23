@@ -1,3 +1,4 @@
+import { EventType } from '../lib/constants';
 import { getYearProgress } from '../lib/utils';
 import EventProgressModel from '../viewmodels/EventProgressModel';
 import EventMenuItem from './EventMenuItem';
@@ -15,6 +16,8 @@ struct YearlyProgress {
       `${this.progress.year} Year Progress`,
       this.progress.total,
       this.progress.elapsed,
+      Color.Blue,
+      EventType.Yearly,
     );
 
   build() {

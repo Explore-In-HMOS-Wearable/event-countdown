@@ -3,8 +3,13 @@ import { getDayProgress } from '../lib/utils';
 import EventProgressModel from '../viewmodels/EventProgressModel';
 import EventMenuItem from './EventMenuItem';
 
+@Builder
+export default function dailyProgressBuilder() {
+  DailyProgress()
+}
+
 @Component
-export default struct DailyProgress {
+struct DailyProgress {
   private progress = getDayProgress()
   private event: EventProgressModel =
     new EventProgressModel(

@@ -1,6 +1,7 @@
 import { calendarManager } from '@kit.CalendarKit';
-import { formatDate, getEventProgress, getRandomColor } from '../lib/utils';
 import { ArcListItem } from '@kit.ArkUI';
+import CalendarEventProgressModel from '../viewmodels/CalendarEventProgressModel';
+import { EIGHTY_FIVE_PERCENT } from '../lib/constants';
 
 interface Progress {
   years: number;
@@ -12,61 +13,52 @@ interface Progress {
 
 @Component
 export default struct CalendarEventsProgress {
-  @Prop event: calendarManager.Event | undefined;
-  private date: Date = new Date();
-  private progress: Progress | undefined;
-  private isPassed: boolean = false;
-  private total: number = 100;
-  private elapsed: number = 100;
+  @Prop @Require calendarEvent: calendarManager.Event;
+  pathStack: NavPathStack = AppStorage.get('PathStack') as NavPathStack;
+  private event: CalendarEventProgressModel | null = null;
 
   aboutToAppear(): void {
-    this.date = new Date(this.event!.startTime);
-    const eventProgress = getEventProgress(this.date);
-    this.progress = eventProgress.progress;
-    this.isPassed = eventProgress.isPassed;
-    this.total = eventProgress.total;
-    this.elapsed = eventProgress.elapsed;
+    this.event = new CalendarEventProgressModel(this.calendarEvent);
   }
 
   build() {
     ArcListItem() {
       Row() {
         DataPanel({
-          values: [this.elapsed],
-          max: this.total,
+          values: [this.event?.elapsed],
+          max: this.event?.total,
           type: DataPanelType.Circle,
         })
-          .valueColors([this.isPassed ? Color.Green : getRandomColor()])
+          .valueColors([this.event?.color])
           .width('65vp')
           .height('65vp')
-
         Column() {
           Row() {
-            Text(this.event?.title)
+            Text(this.event?.event?.title)
               .maxLines(2)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .textAlign(TextAlign.Start)
               .fontWeight(FontWeight.Bold)
               .fontSize(14)
-            if (this.isPassed) {
+            if (this.event?.isPassed) {
               Text(' - Passed')
                 .fontSize(10)
             }
           }
 
           Row() {
-            Text(formatDate(this.date))
+            Text(this.event?.formattedDate)
               .fontSize(10)
               .textAlign(TextAlign.Start)
             Blank(3)
             Row() {
-              if (this.isPassed) {
+              if (this.event?.isPassed) {
                 Text('-')
                   .fontSize(14)
                   .fontWeight(FontWeight.Bold)
               }
-              if (this.progress!.years > 0) {
-                Text(`${this.progress?.years}`)
+              if (this.event!.progress?.years > 0) {
+                Text(`${this.event!.progress?.years}`)
                   .fontSize(18)
                   .fontWeight(FontWeight.Bold)
                   .textAlign(TextAlign.Start)
@@ -74,8 +66,8 @@ export default struct CalendarEventsProgress {
                   .fontSize(11)
                   .opacity(0.6)
                   .alignSelf(ItemAlign.Baseline)
-              } else if (this.progress!.days > 0) {
-                Text(`${this.progress?.days}`)
+              } else if (this.event!.progress?.days > 0) {
+                Text(`${this.event!.progress?.days}`)
                   .fontSize(18)
                   .fontWeight(FontWeight.Bold)
                   .textAlign(TextAlign.Start)
@@ -83,8 +75,8 @@ export default struct CalendarEventsProgress {
                   .fontSize(11)
                   .opacity(0.6)
                   .alignSelf(ItemAlign.Baseline)
-              } else if (this.progress!.hours > 0) {
-                Text(`${this.progress?.hours}`)
+              } else if (this.event!.progress?.hours > 0) {
+                Text(`${this.event!.progress?.hours}`)
                   .fontSize(18)
                   .fontWeight(FontWeight.Bold)
                   .textAlign(TextAlign.Start)
@@ -92,8 +84,8 @@ export default struct CalendarEventsProgress {
                   .fontSize(11)
                   .opacity(0.6)
                   .alignSelf(ItemAlign.Baseline)
-              } else if (this.progress!.minutes > 0) {
-                Text(`${this.progress?.minutes}`)
+              } else if (this.event!.progress?.minutes > 0) {
+                Text(`${this.event!.progress?.minutes}`)
                   .fontSize(18)
                   .fontWeight(FontWeight.Bold)
                   .textAlign(TextAlign.Start)
@@ -101,8 +93,8 @@ export default struct CalendarEventsProgress {
                   .fontSize(11)
                   .opacity(0.6)
                   .alignSelf(ItemAlign.Baseline)
-              } else if (this.progress!.sec > 0) {
-                Text(`${this.progress?.sec}`)
+              } else if (this.event!.progress?.sec > 0) {
+                Text(`${this.event!.progress?.sec}`)
                   .fontSize(18)
                   .fontWeight(FontWeight.Bold)
                   .textAlign(TextAlign.Start)
@@ -114,15 +106,17 @@ export default struct CalendarEventsProgress {
             }
           }
           .justifyContent(FlexAlign.SpaceBetween)
-
         }
         .justifyContent(FlexAlign.Start)
         .alignItems(HorizontalAlign.Start)
       }
+      .onClick(() => {
+        this.pathStack.pushPathByName('EventPage', this.event);
+      })
       .backgroundColor($r('app.color.progress_background'))
       .borderRadius(25)
       .margin(5)
-      .width('85%')
+      .width(EIGHTY_FIVE_PERCENT)
       .padding({
         top: 3,
         bottom: 3,

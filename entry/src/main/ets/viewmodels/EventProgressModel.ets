@@ -1,4 +1,5 @@
 import { EventType } from '../lib/constants';
+import { formatDate } from '../lib/utils';
 
 export default class EventProgressModel {
   name: string = '';
@@ -6,6 +7,7 @@ export default class EventProgressModel {
   progress: number = 0;
   color: Color = Color.Blue;
   type: EventType = EventType.Yearly;
+  date: Date = new Date()
 
   constructor(
     name: string,
@@ -19,6 +21,9 @@ export default class EventProgressModel {
     this.progress = progress;
     this.color = color ?? Color.Blue;
     this.type = type ?? EventType.Yearly;
+    const date = new Date();
+    date.setHours(23, 59, 59, 99);
+    this.date = date;
   }
 
   get percentage(): string {
@@ -28,12 +33,12 @@ export default class EventProgressModel {
 
   get unit(): string {
     if (this.type === EventType.Daily) {
-      return this.progress === 1 ? "hour" : "hours";
+      return this.progress === 1 ? 'hour' : 'hours';
     }
-    return this.progress === 1 ? "day" : "days";
+    return this.progress === 1 ? 'day' : 'days';
   }
 
-  get progressInDays() {
-    return 1;
+  get formattedDate() {
+    return formatDate(this.date);
   }
 }

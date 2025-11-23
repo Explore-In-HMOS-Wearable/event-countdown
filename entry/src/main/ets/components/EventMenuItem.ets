@@ -1,9 +1,11 @@
 import { ArcListItem } from '@kit.ArkUI';
 import EventProgressModel from '../viewmodels/EventProgressModel';
+import { EIGHTY_FIVE_PERCENT } from '../lib/constants';
 
 @Component
 export default struct EventMenuItem {
   @Prop event: EventProgressModel;
+  pathStack: NavPathStack = AppStorage.get('PathStack') as NavPathStack;
 
   build() {
     ArcListItem() {
@@ -46,12 +48,15 @@ export default struct EventMenuItem {
       .backgroundColor($r('app.color.progress_background'))
       .borderRadius(25)
       .margin(5)
-      .width('85%')
+      .width(EIGHTY_FIVE_PERCENT)
       .padding({
         top: 3,
         bottom: 3,
         left: 4,
         right: 3
+      })
+      .onClick(() => {
+        this.pathStack.pushPathByName('ConstantEventPage', this.event);
       })
     }
   }

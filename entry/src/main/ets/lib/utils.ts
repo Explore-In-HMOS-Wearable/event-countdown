@@ -1,6 +1,16 @@
 import dayjs from 'dayjs';
 
-function convertMsToDHM(ms) {
+const today = new Date();
+
+interface Progress {
+  years: number;
+  days: number;
+  hours: number;
+  minutes: number;
+  sec: number;
+}
+
+function convertMsToDHM(ms): Progress {
   const days = Math.floor(ms / (24 * 60 * 60 * 1000));
   const daysMS = ms % (24 * 60 * 60 * 1000);
   const hours = Math.floor(daysMS / (60 * 60 * 1000));
@@ -9,6 +19,7 @@ function convertMsToDHM(ms) {
   const minMs = ms % (60 * 1000);
   const sec = Math.floor(minMs / 1000);
   const years = Math.floor(days / 365);
+
   return {
     years,
     days,
@@ -18,18 +29,23 @@ function convertMsToDHM(ms) {
   }
 }
 
-function getMonthDayName(date: Date) {
-  const monthName = date.toLocaleString("en-US", { month: "long" })
-  const dayName = date.toLocaleString("en-US", { weekday: "long" })
+function getMonthDayName(date: Date): { monthName: string; dayName: string; } {
+  const monthName = date.toLocaleString('en-US', { month: 'long' })
+  const dayName = date.toLocaleString('en-US', { weekday: 'long' })
 
   return { monthName, dayName }
 }
 
-export function formatDate(date: Date) {
+export function formatDate(date: Date): string {
   return dayjs(date).format('DD.MM.YYYY HH:mm')
 }
 
-export function getDayProgress(today: Date = new Date()) {
+export function getDayProgress(today: Date = new Date()): {
+  elapsed: number;
+  total: number;
+  progress: Progress;
+  day: string;
+} {
   const start = new Date(today);
   start.setHours(0, 0, 0, 0);
 
@@ -45,11 +61,17 @@ export function getDayProgress(today: Date = new Date()) {
   return {
     elapsed: elapsedDays.hours,
     total: totalDays.hours,
+    progress: elapsedDays,
     day: getMonthDayName(today).dayName,
   }
 }
 
-export function getMonthProgress(today: Date = new Date()) {
+export function getMonthProgress(today: Date = new Date()): {
+  elapsed: number;
+  total: number;
+  progress: Progress;
+  month: string;
+} {
   const start = new Date(today.getFullYear(), today.getMonth(), 1);
   const end = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
 
@@ -62,11 +84,17 @@ export function getMonthProgress(today: Date = new Date()) {
   return {
     elapsed: elapsedDays.days + 1,
     total: totalDays.days + 1,
+    progress: elapsedDays,
     month: getMonthDayName(today).monthName,
   }
 }
 
-export function getYearProgress(today: Date = new Date()) {
+export function getYearProgress(today: Date = new Date()): {
+  elapsed: number;
+  total: number;
+  progress: Progress;
+  year: number;
+} {
   const startOfYear = new Date(today.getFullYear(), 0, 1)
   const endOfYear = new Date(today.getFullYear() + 1, 0, 1)
 
@@ -76,11 +104,20 @@ export function getYearProgress(today: Date = new Date()) {
   const elapsedDays = convertMsToDHM(elapsed);
   const totalDays = convertMsToDHM(total);
 
-  return { elapsed: elapsedDays.days, total: totalDays.days, year: today.getFullYear() }
+  return {
+    elapsed: elapsedDays.days,
+    total: totalDays.days,
+    progress: elapsedDays,
+    year: today.getFullYear(),
+  }
 }
 
-export function getEventProgress(date: Date) {
-  const today = new Date();
+export function getEventProgress(date: Date): {
+  progress: Progress;
+  isPassed: boolean;
+  total: number;
+  elapsed: number;
+} {
   const start = new Date(date.getFullYear(), 0, 1);
   let isPassed = false;
 
@@ -123,7 +160,7 @@ export function getEventProgress(date: Date) {
   };
 }
 
-export function getRandomColor() {
+export function getRandomColor(): string {
   const letters = '0123456789ABCDEF';
   let color = '#';
   for (let index = 0; index < 6; index++) {

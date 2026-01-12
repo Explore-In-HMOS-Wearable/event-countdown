@@ -22,7 +22,7 @@ struct YearlyCard {
         DataPanel({
           values: [this.yearProgress.progress],
           max: this.yearProgress.maxProgress,
-          type: DataPanelType.Circle,
+          type: DataPanelType.Circle
         })
           .valueColors([this.yearProgress.color])
           .width(60)

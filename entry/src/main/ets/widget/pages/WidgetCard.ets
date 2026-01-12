@@ -34,7 +34,7 @@ struct WidgetCard {
     .onClick(() => {
       postCardAction(this, {
         action: this.actionType,
-        abilityName: this.abilityName,
+        abilityName: this.abilityName
       });
     })
   }

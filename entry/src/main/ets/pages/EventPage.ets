@@ -9,16 +9,16 @@ export function EventPageBuilder() {
 @Component
 struct EventPage {
   pathStack: NavPathStack = AppStorage.get('PathStack') as NavPathStack
-  @State event: CalendarEventProgressModel | null = null;
+  @State calendarEvent: CalendarEventProgressModel | null = null;
 
   aboutToAppear(): void {
-    this.event = this.pathStack.getParamByName('EventPage')[0] as CalendarEventProgressModel;
+    this.calendarEvent = this.pathStack.getParamByName('EventPage')[0] as CalendarEventProgressModel;
   }
 
   build() {
     RelativeContainer() {
-      if (this.event != null) {
-        CalendarEventView({ event: this.event })
+      if (this.calendarEvent != null) {
+        CalendarEventView({ calendarEvent: this.calendarEvent })
       }
     }
     .backgroundColor($r('app.color.main_background'))

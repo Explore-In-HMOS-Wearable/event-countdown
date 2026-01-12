@@ -18,7 +18,7 @@ export default class CalendarEventProgressModel {
     days: 0,
     hours: 0,
     minutes: 0,
-    sec: 0,
+    sec: 0
   }
   total: number = 100;
   elapsed: number = 0;

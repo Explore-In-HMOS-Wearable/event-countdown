@@ -5,15 +5,20 @@ import { EIGHTY_PERCENT, EventType, FIFTY_PERCENT, FULL_HEIGHT_PERCENT, FULL_WID
 
 @Component
 export default struct EventView {
-  @Prop @Require event: EventProgressModel;
-  @State intervalId: number = -1;
+  @Prop @Require @Watch('onEventChange') event: EventProgressModel;
+  private intervalId: number = -1;
   @State progress: Progress = {
     years: 0,
     days: 0,
     hours: 0,
     minutes: 0,
-    sec: 0,
+    sec: 0
   };
+
+  onEventChange() {
+    let today = new Date();
+    this.startProgress(today)
+  }
 
   startProgress(today: Date) {
     today.setTime(today.getTime() - 1000);
@@ -47,8 +52,7 @@ export default struct EventView {
       DataPanel({
         values: [this.event.progress],
         max: this.event.maxProgress,
-        type: DataPanelType.Circle,
-
+        type: DataPanelType.Circle
       })
         .valueColors([this.event.color])
         .width(FULL_WIDTH_PERCENT)

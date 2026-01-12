@@ -62,7 +62,7 @@ export function getDayProgress(today: Date = new Date()): {
     elapsed: elapsedDays.hours,
     total: totalDays.hours,
     progress: elapsedDays,
-    day: getMonthDayName(today).dayName,
+    day: getMonthDayName(today).dayName
   }
 }
 
@@ -85,7 +85,7 @@ export function getMonthProgress(today: Date = new Date()): {
     elapsed: elapsedDays.days + 1,
     total: totalDays.days + 1,
     progress: elapsedDays,
-    month: getMonthDayName(today).monthName,
+    month: getMonthDayName(today).monthName
   }
 }
 
@@ -108,7 +108,7 @@ export function getYearProgress(today: Date = new Date()): {
     elapsed: elapsedDays.days,
     total: totalDays.days,
     progress: elapsedDays,
-    year: today.getFullYear(),
+    year: today.getFullYear()
   }
 }
 
@@ -156,7 +156,7 @@ export function getEventProgress(date: Date): {
     progress: leftDHM,
     isPassed,
     total,
-    elapsed,
+    elapsed
   };
 }
 

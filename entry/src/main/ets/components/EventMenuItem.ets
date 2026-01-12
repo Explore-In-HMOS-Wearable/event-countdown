@@ -13,7 +13,7 @@ export default struct EventMenuItem {
         DataPanel({
           values: [this.event.progress],
           max: this.event.maxProgress,
-          type: DataPanelType.Circle,
+          type: DataPanelType.Circle
         })
           .valueColors([this.event.color])
           .width('65vp')

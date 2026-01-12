@@ -27,7 +27,7 @@ export default struct CalendarEventsProgress {
         DataPanel({
           values: [this.event?.elapsed],
           max: this.event?.total,
-          type: DataPanelType.Circle,
+          type: DataPanelType.Circle
         })
           .valueColors([this.event?.color])
           .width('65vp')

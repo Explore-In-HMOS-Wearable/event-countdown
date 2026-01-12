@@ -40,14 +40,14 @@ export default class EntryAbility extends UIAbility {
     });
     let mContext = this.context;
 
-    let GlobalContent = GlobalContext.getInstance();
-    GlobalContent.saveContext(mContext);
+    let globalContent = GlobalContext.getInstance();
+    globalContent.saveContext(mContext);
 
     const permissions: Permissions[] = ['ohos.permission.READ_CALENDAR', 'ohos.permission.WRITE_CALENDAR'];
     let atManager = abilityAccessCtrl.createAtManager();
     atManager.requestPermissionsFromUser(mContext, permissions).then((result: PermissionRequestResult) => {
       console.info(`get Permission success, result: ${JSON.stringify(result)}`);
-      GlobalContent.saveContext(mContext);
+      globalContent.saveContext(mContext);
 
     }).catch((error: BusinessError) => {
       console.error(`get Permission error, error. Code: ${error.code}, message: ${error.message}`);

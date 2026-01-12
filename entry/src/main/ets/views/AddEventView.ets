@@ -7,7 +7,7 @@ import {
   ArcScrollBar,
   ColorMetrics,
   LengthMetrics,
-  LengthUnit,
+  LengthUnit
 } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
@@ -83,7 +83,7 @@ export default struct AddEventView {
             DatePicker({
               start: new Date('1970-1-1'),
               end: new Date('2100-1-1'),
-              selected: this.selectedDate,
+              selected: this.selectedDate
             })
               .lunar(false)
               .borderRadius(10)

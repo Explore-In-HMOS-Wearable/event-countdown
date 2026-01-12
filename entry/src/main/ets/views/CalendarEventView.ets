@@ -4,16 +4,21 @@ import CalendarEventProgressModel, { Progress } from '../viewmodels/CalendarEven
 
 @Component
 export default struct CalendarEventView {
-  @Prop @Require event: CalendarEventProgressModel | null = null;
-  @State intervalId: number = -1;
-  @State value: number = this.event?.elapsed ?? 0;
+  @Prop @Require @Watch('onEventChange') calendarEvent: CalendarEventProgressModel | null = null;
+  private intervalId: number = -1;
+  @State value: number = this.calendarEvent?.elapsed ?? 0;
   @State progress: Progress = {
     years: 0,
     days: 0,
     hours: 0,
     minutes: 0,
-    sec: 0,
+    sec: 0
   };
+
+  onEventChange() {
+    let today = new Date();
+    this.startProgress(today)
+  }
 
   startProgress(date: Date) {
     const time = date.getTime();
@@ -25,8 +30,8 @@ export default struct CalendarEventView {
   }
 
   aboutToAppear(): void {
-    if (this.event != null) {
-      const date = new Date(this.event.date);
+    if (this.calendarEvent != null) {
+      const date = new Date(this.calendarEvent.date);
       let result = this.startProgress(date);
       this.intervalId = setInterval(() => {
         result = this.startProgress(result);
@@ -42,23 +47,22 @@ export default struct CalendarEventView {
     Stack() {
       DataPanel({
         values: [this.value],
-        max: this.event?.total ?? 100,
-        type: DataPanelType.Circle,
-
+        max: this.calendarEvent?.total ?? 100,
+        type: DataPanelType.Circle
       })
-        .valueColors([this.event?.color])
+        .valueColors([this.calendarEvent?.color])
         .width(FULL_WIDTH_PERCENT)
         .height(FULL_HEIGHT_PERCENT)
         .margin(0)
       Column({ space: 10 }) {
-        Text(this.event?.event?.title)
+        Text(this.calendarEvent?.event?.title)
           .fontSize(25)
           .fontWeight(FontWeight.Bold)
-        Text(formatDate(this.event?.date))
+        Text(formatDate(this.calendarEvent?.date))
           .fontSize(14)
 
         Row() {
-          if (this.event?.isPassed) {
+          if (this.calendarEvent?.isPassed) {
             Text('-')
               .fontSize(14)
               .fontWeight(FontWeight.Bold)

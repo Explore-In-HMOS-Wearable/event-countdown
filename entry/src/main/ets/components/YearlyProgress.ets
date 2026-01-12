@@ -4,7 +4,7 @@ import EventProgressModel from '../viewmodels/EventProgressModel';
 import EventMenuItem from './EventMenuItem';
 
 @Builder
-export default function YearlyProgressBuilder() {
+export default function yearlyProgressBuilder() {
   YearlyProgress()
 }
 
